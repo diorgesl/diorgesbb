@@ -1,0 +1,43 @@
+{
+    "name": "diorgesl/diorgesbb",
+    "description": "Boletos com API Piloto do Banco do Brasil",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Diorges Rocha",
+            "email": "diorges@gis.net.br",
+            "homepage": "https://gis.net.br/"
+        }
+    ],
+    "homepage": "https://github.com/diorgesl/diorgesbb",
+    "keywords": ["Laravel", "DiorgesBB"],
+    "require": {
+        "illuminate/support": "~5|~6|~7|~8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~8.0|~9.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3|~4|~5|~6",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Diorgesl\\DiorgesBB\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Diorgesl\\DiorgesBB\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Diorgesl\\DiorgesBB\\DiorgesBBServiceProvider"
+            ],
+            "aliases": {
+                "DiorgesBB": "Diorgesl\\DiorgesBB\\Facades\\DiorgesBB"
+            }
+        }
+    }
+}
