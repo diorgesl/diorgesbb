@@ -48,7 +48,7 @@ class DiorgesBBServiceProvider extends ServiceProvider
     {
         return ['diorgesbb'];
     }
-    
+
     /**
      * Console-specific booting.
      *
@@ -59,7 +59,7 @@ class DiorgesBBServiceProvider extends ServiceProvider
         // Publishing the configuration file.
         $this->publishes([
             __DIR__.'/../config/diorgesbb.php' => config_path('diorgesbb.php'),
-        ], 'diorgesbb.config');
+        ], 'config');
 
         // Publishing the views.
         /*$this->publishes([
