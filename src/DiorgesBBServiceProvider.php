@@ -59,7 +59,7 @@ class DiorgesBBServiceProvider extends ServiceProvider
         // Publishing the configuration file.
         $this->publishes([
             __DIR__.'/../config/diorgesbb.php' => config_path('diorgesbb.php'),
-        ], 'config');
+        ], 'diorgesbb.config');
 
         // Publishing the views.
         /*$this->publishes([

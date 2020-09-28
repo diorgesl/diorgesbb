@@ -5,7 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
 
-This is where your description should go. Take a look at [contributing.md](contributing.md) to see a to do list.
+API para registro/verificação de boletos usando o projeto Piloto do BB.
 
 ## Installation
 
@@ -16,6 +16,13 @@ $ composer require diorgesl/diorgesbb
 ```
 
 ## Usage
+
+Arquivo de Configuração
+``` bash
+php artisan vendor:publish --provider="Diorgesl\DiorgesBB\DiorgesBBServiceProvider"
+```
+
+Configurar o arquivo `config/diorgesbb.php` com os dados de acesso da API.
 
 ## Change log
 
