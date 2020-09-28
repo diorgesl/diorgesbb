@@ -592,4 +592,14 @@ class Boleto
         return $this;
     }
 
+    public function toArray() {
+        return [
+            'numeroConvenio' => $this->getNumeroConvenio(),
+            'numeroCarteira' => $this->getNumeroCarteira(),
+            'numeroVariacaoCarteira' => $this->getNumeroVariacaoCarteira(),
+            'codigoModalidade' => $this->getCodigoModalidade(),
+
+        ];
+    }
+
 }
