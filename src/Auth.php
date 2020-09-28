@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Http;
 class Auth
 {
     public static function obtainAccessToken() {
-        $client = new Client();
         $basic = config('diorgesbb.basic');
         $formaBasic = base64_encode(config('diorgesbb.client_id'). ':' .config('diorgesbb.cliente_secret'));
         if($basic != $formaBasic) {
