@@ -5,7 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
 
-API para registro/verificação de boletos usando o projeto Piloto do BB, compátivel com Laravel 5 ao 8.
+Pacote para Laravel, API para registro/verificação de boletos usando o projeto Piloto do BB, compátivel com Laravel 5 ao 8.
 
 ## Installation
 
@@ -23,6 +23,44 @@ php artisan vendor:publish --provider="Diorgesl\DiorgesBB\DiorgesBBServiceProvid
 ```
 
 Configurar o arquivo `config/diorgesbb.php` com os dados de acesso da API.
+
+Para registrar um boleto:
+```
+<?php 
+use Diorgesl\DiorgesBB\Boletos;
+use Diorgesl\DiorgesBB\Boleto;
+use Diorgesl\DiorgesBB\Pagador;
+
+$boletos = new Boletos();
+
+$pagador = new Pagador([
+    'numeroRegistro' => 97965940132,
+    'nome' => 'CLIENTE TESTE',
+    'endereco' => 'AL SATELITE 13',
+    'bairro' => 'UNIVERSITARIO',
+    'cidade' => 'CORUMBA',
+    'cep' => 79304310,
+    'uf' => 'MS'
+]);
+
+$boleto = new Boleto([
+    "codigoModalidade" => 1,
+    "dataEmissao" => "29.09.2020",
+    "dataVencimento" => "30.10.2020",
+    "valorOriginal" => 109.90,
+    "codigoAceite" => "N",
+    "codigoTipoTitulo" => 10,
+    "descricaoTipoTitulo" => "Duplicata Mercantil",
+    "indicadorPermissaoRecebimentoParcial" => "N",
+    "numeroTituloBeneficiario" => "123456",
+    "numeroTituloCliente" => 43832318,
+    "pagador" => $pagador,
+]);
+
+$ret = $boletos->registrar($boleto);
+
+var_dump($ret);
+```
 
 ## Change log
 
