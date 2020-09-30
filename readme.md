@@ -53,13 +53,42 @@ $boleto = new Boleto([
     "descricaoTipoTitulo" => "Duplicata Mercantil",
     "indicadorPermissaoRecebimentoParcial" => "N",
     "numeroTituloBeneficiario" => "123456",
-    "numeroTituloCliente" => 43832318,
+    "numeroTituloCliente" => 43832319,
     "pagador" => $pagador,
 ]);
 
 $ret = $boletos->registrar($boleto);
 
 var_dump($ret);
+```
+
+Resposta do servidor:
+```
+{
+   "numero":"00031285570043832319",
+   "numeroCarteira":17,
+   "numeroVariacaoCarteira":35,
+   "codigoCliente":704950857,
+   "linhaDigitavel":"00190000090312855700043832319172884240000010990",
+   "codigoBarraNumerico":"00198842400000109900000003128557004383231917",
+   "numeroContratoCobranca":19581316,
+   "beneficiario":{
+      "agencia":452,
+      "contaCorrente":123873,
+      "tipoEndereco":0,
+      "logradouro":"Cliente nao localizado ou sem enderecos validos.",
+      "bairro":"",
+      "cidade":"",
+      "codigoCidade":0,
+      "uf":"",
+      "cep":0,
+      "indicadorComprovacao":""
+   },
+   "quantidadeOcorrenciasNegativacao":"0",
+   "listaOcorrenciasNegativacao":[
+      
+   ]
+}
 ```
 
 ## Change log
