@@ -27,84 +27,101 @@ class Pagador implements \JsonSerializable
             if (method_exists($this, 'getProtectedFields') && in_array(lcfirst($param), $this->getProtectedFields())) {
                 continue;
             }
-            if (method_exists($this, 'set' . ucwords($param))) {
-                $this->{'set' . ucwords($param)}($value);
+            if (method_exists($this, 'set'.ucwords($param))) {
+                $this->{'set'.ucwords($param)}($value);
             }
         }
     }
 
-    public function setNome($nome){
+    public function setNome($nome)
+    {
         $this->nome = $nome;
     }
 
-    public function setEndereco($endereco){
+    public function setEndereco($endereco)
+    {
         $this->endereco = $endereco;
     }
 
-    public function setBairro($bairro){
+    public function setBairro($bairro)
+    {
         $this->bairro = $bairro;
     }
 
-    public function setCep($cep){
+    public function setCep($cep)
+    {
         $this->cep = $cep;
     }
 
-    public function setUf($uf){
+    public function setUf($uf)
+    {
         $this->uf = $uf;
     }
 
-    public function setCidade($cidade){
+    public function setCidade($cidade)
+    {
         $this->cidade = $cidade;
     }
 
-    public function setNumeroRegistro($numeroRegistro){
+    public function setNumeroRegistro($numeroRegistro)
+    {
         $this->numeroRegistro = $numeroRegistro;
     }
 
-    public function setTipoRegistro($tipoRegistro){
+    public function setTipoRegistro($tipoRegistro)
+    {
         $this->tipoRegistro = $tipoRegistro;
     }
 
-    public function getNome(){
+    public function getNome()
+    {
         return $this->nome;
     }
 
-    public function getEndereco(){
+    public function getEndereco()
+    {
         return $this->endereco;
     }
 
-    public function getBairro(){
+    public function getBairro()
+    {
         return $this->bairro;
     }
 
-    public function getCep(){
+    public function getCep()
+    {
         return $this->cep;
     }
 
-    public function getUf(){
+    public function getUf()
+    {
         return $this->uf;
     }
 
-    public function getCidade(){
+    public function getCidade()
+    {
         return $this->cidade;
     }
 
-    public function getNumeroRegistro(){
+    public function getNumeroRegistro()
+    {
         return $this->numeroRegistro;
     }
 
-    public function getTipoRegistro(){
+    public function getTipoRegistro()
+    {
         return strlen($this->numeroRegistro) <= 11 ? 1 : 2;
     }
 
-    public function jsonSerialize () {
+    public function jsonSerialize()
+    {
         $arr = [];
 
-        foreach(get_class_methods($this) as $method){
+        foreach (get_class_methods($this) as $method) {
             if (strpos($method, 'get') !== false) {
                 $value = $this->{$method}();
 
-                if(!empty($value) || strlen(trim($value)) > 0){
+                if (! empty($value) || strlen(trim($value)) > 0) {
                     $arr[lcfirst(str_replace(['set', 'get'], ['', ''], $method))] = $value;
                 }
             }

@@ -25,7 +25,7 @@ return [
             'developer_application_key' => '',
             'client_id' => '',
             'client_secret' => '',
-            'basic' => ''
+            'basic' => '',
         ],
         'producao' => [
             'agenciaBeneficiario' => '', // SEM DIFITO VERIFICADOR
@@ -36,7 +36,7 @@ return [
             'developer_application_key' => '',
             'client_id' => '',
             'client_secret' => '',
-            'basic' => ''
-        ]
-    ]
+            'basic' => '',
+        ],
+    ],
 ];

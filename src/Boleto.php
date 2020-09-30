@@ -2,12 +2,8 @@
 
 namespace Diorgesl\DiorgesBB;
 
-use Diorgesl\DiorgesBB\Avalista;
-use Diorgesl\DiorgesBB\Pagador;
-
 class Boleto implements \JsonSerializable
 {
-
     /*
      * Identificador determinado pelo sistema Cobrança para controlar a emissão
      * de boletos, liquidação, crédito de valores ao Beneficiário e intercâmbio
@@ -237,13 +233,13 @@ class Boleto implements \JsonSerializable
     public function __construct($params = [])
     {
         $api = config('diorgesbb.api.homologa');
-        if(config('diorgesbb.production')){
+        if (config('diorgesbb.production')) {
             $api = config('diorgesbb.api.producao');
         }
 
-        foreach($api as $k => $v){
-            if (method_exists($this, 'set' . ucwords($k))) {
-                $this->{'set' . ucwords($k)}($v);
+        foreach ($api as $k => $v) {
+            if (method_exists($this, 'set'.ucwords($k))) {
+                $this->{'set'.ucwords($k)}($v);
             }
         }
 
@@ -252,8 +248,8 @@ class Boleto implements \JsonSerializable
             if (method_exists($this, 'getProtectedFields') && in_array(lcfirst($param), $this->getProtectedFields())) {
                 continue;
             }
-            if (method_exists($this, 'set' . ucwords($param))) {
-                $this->{'set' . ucwords($param)}($value);
+            if (method_exists($this, 'set'.ucwords($param))) {
+                $this->{'set'.ucwords($param)}($value);
             }
         }
     }
@@ -535,8 +531,9 @@ class Boleto implements \JsonSerializable
      */
     public function getNumeroTituloCliente()
     {
-        $convenio = str_pad($this->getNumeroConvenio(), 10, "0", STR_PAD_LEFT);
-        $numeroTituloCliente = str_pad($this->numeroTituloCliente, 10, "0", STR_PAD_LEFT);
+        $convenio = str_pad($this->getNumeroConvenio(), 10, '0', STR_PAD_LEFT);
+        $numeroTituloCliente = str_pad($this->numeroTituloCliente, 10, '0', STR_PAD_LEFT);
+
         return $convenio.$numeroTituloCliente;
     }
 
@@ -611,6 +608,7 @@ class Boleto implements \JsonSerializable
     public function setPagador($pagador)
     {
         $this->pagador = new Pagador($pagador);
+
         return $this;
     }
 
@@ -629,21 +627,23 @@ class Boleto implements \JsonSerializable
     public function setAvalista($avalista)
     {
         $this->avalista = new Avalista($avalista);
+
         return $this;
     }
 
-    public function jsonSerialize () {
+    public function jsonSerialize()
+    {
         $arr = [];
-        foreach(get_class_methods($this) as $method){
+        foreach (get_class_methods($this) as $method) {
             if (strpos($method, 'get') !== false) {
                 $value = $this->{$method}();
 
-                if(is_numeric($value)){
-                    if($value > 0){
+                if (is_numeric($value)) {
+                    if ($value > 0) {
                         $arr[lcfirst(str_replace(['set', 'get'], ['', ''], $method))] = $value;
                     }
-                }else{
-                    if(!empty($value) || strlen(trim($value)) > 0){
+                } else {
+                    if (! empty($value) || strlen(trim($value)) > 0) {
                         $arr[lcfirst(str_replace(['set', 'get'], ['', ''], $method))] = $value;
                     }
                 }
