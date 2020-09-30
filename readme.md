@@ -5,7 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
 
-API para registro/verificação de boletos usando o projeto Piloto do BB.
+API para registro/verificação de boletos usando o projeto Piloto do BB, compátivel com Laravel 5 ao 8.
 
 ## Installation
 

@@ -2,7 +2,10 @@
 
 namespace Diorgesl\DiorgesBB;
 
-class Boleto
+use Diorgesl\DiorgesBB\Avalista;
+use Diorgesl\DiorgesBB\Pagador;
+
+class Boleto implements \JsonSerializable
 {
 
     /*
@@ -63,14 +66,14 @@ class Boleto
      *
      * @var float
      */
-    protected $valorOriginal = 0;
+    protected $valorOriginal = 0.00;
 
     /*
      * Valor de dedução do boleto >= 0.00 (formato decimal separado por ".").
      *
      * @var float
      */
-    protected $valorAbatimento = 0;
+    protected $valorAbatimento = 0.00;
 
     /*
      * Quantos dias após a data de emissão do boleto para iniciar o processo
@@ -206,6 +209,12 @@ class Boleto
      */
     protected $quantidadeDiasNegativacao;
 
+    /*
+     * Dados do Avalista
+     *
+     * @var Object Avalista
+     */
+
     protected $avalista;
 
     /*
@@ -227,6 +236,17 @@ class Boleto
 
     public function __construct($params = [])
     {
+        $api = config('diorgesbb.api.homologa');
+        if(config('diorgesbb.production')){
+            $api = config('diorgesbb.api.producao');
+        }
+
+        foreach($api as $k => $v){
+            if (method_exists($this, 'set' . ucwords($k))) {
+                $this->{'set' . ucwords($k)}($v);
+            }
+        }
+
         foreach ($params as $param => $value) {
             $param = str_replace(' ', '', ucwords(str_replace('_', ' ', $param)));
             if (method_exists($this, 'getProtectedFields') && in_array(lcfirst($param), $this->getProtectedFields())) {
@@ -239,25 +259,25 @@ class Boleto
     }
 
     /**
-     * @return float
-     */
-    public function getNumeroDiasLimiteRecebimento(): float
-    {
-        return $this->numeroDiasLimiteRecebimento;
-    }
-
-    /**
      * @param float $numeroDiasLimiteRecebimento
      */
-    public function setNumeroDiasLimiteRecebimento(float $numeroDiasLimiteRecebimento): void
+    public function setNumeroDiasLimiteRecebimento($numeroDiasLimiteRecebimento)
     {
         $this->numeroDiasLimiteRecebimento = $numeroDiasLimiteRecebimento;
     }
 
     /**
+     * @return float
+     */
+    public function getNumeroDiasLimiteRecebimento()
+    {
+        return $this->numeroDiasLimiteRecebimento;
+    }
+
+    /**
      * @return int
      */
-    public function getNumeroConvenio(): int
+    public function getNumeroConvenio()
     {
         return $this->numeroConvenio;
     }
@@ -265,7 +285,7 @@ class Boleto
     /**
      * @param int $numeroConvenio
      */
-    public function setNumeroConvenio(int $numeroConvenio): void
+    public function setNumeroConvenio($numeroConvenio)
     {
         $this->numeroConvenio = $numeroConvenio;
     }
@@ -273,7 +293,7 @@ class Boleto
     /**
      * @return int
      */
-    public function getNumeroCarteira(): int
+    public function getNumeroCarteira()
     {
         return $this->numeroCarteira;
     }
@@ -281,7 +301,7 @@ class Boleto
     /**
      * @param int $numeroCarteira
      */
-    public function setNumeroCarteira(int $numeroCarteira): void
+    public function setNumeroCarteira($numeroCarteira)
     {
         $this->numeroCarteira = $numeroCarteira;
     }
@@ -289,7 +309,7 @@ class Boleto
     /**
      * @return int
      */
-    public function getNumeroVariacaoCarteira(): int
+    public function getNumeroVariacaoCarteira()
     {
         return $this->numeroVariacaoCarteira;
     }
@@ -297,7 +317,7 @@ class Boleto
     /**
      * @param int $numeroVariacaoCarteira
      */
-    public function setNumeroVariacaoCarteira(int $numeroVariacaoCarteira): void
+    public function setNumeroVariacaoCarteira($numeroVariacaoCarteira)
     {
         $this->numeroVariacaoCarteira = $numeroVariacaoCarteira;
     }
@@ -305,7 +325,7 @@ class Boleto
     /**
      * @return int
      */
-    public function getCodigoModalidade(): int
+    public function getCodigoModalidade()
     {
         return $this->codigoModalidade;
     }
@@ -313,7 +333,7 @@ class Boleto
     /**
      * @param int $codigoModalidade
      */
-    public function setCodigoModalidade(int $codigoModalidade): void
+    public function setCodigoModalidade($codigoModalidade)
     {
         $this->codigoModalidade = $codigoModalidade;
     }
@@ -329,7 +349,7 @@ class Boleto
     /**
      * @param mixed $dataEmissao
      */
-    public function setDataEmissao($dataEmissao): void
+    public function setDataEmissao($dataEmissao)
     {
         $this->dataEmissao = $dataEmissao;
     }
@@ -345,7 +365,7 @@ class Boleto
     /**
      * @param mixed $dataVencimento
      */
-    public function setDataVencimento($dataVencimento): void
+    public function setDataVencimento($dataVencimento)
     {
         $this->dataVencimento = $dataVencimento;
     }
@@ -353,7 +373,7 @@ class Boleto
     /**
      * @return int
      */
-    public function getValorOriginal(): int
+    public function getValorOriginal()
     {
         return $this->valorOriginal;
     }
@@ -361,7 +381,7 @@ class Boleto
     /**
      * @param int $valorOriginal
      */
-    public function setValorOriginal(int $valorOriginal): void
+    public function setValorOriginal($valorOriginal)
     {
         $this->valorOriginal = $valorOriginal;
     }
@@ -369,7 +389,7 @@ class Boleto
     /**
      * @return int
      */
-    public function getValorAbatimento(): int
+    public function getValorAbatimento()
     {
         return $this->valorAbatimento;
     }
@@ -377,7 +397,7 @@ class Boleto
     /**
      * @param int $valorAbatimento
      */
-    public function setValorAbatimento(int $valorAbatimento): void
+    public function setValorAbatimento($valorAbatimento)
     {
         $this->valorAbatimento = $valorAbatimento;
     }
@@ -385,7 +405,7 @@ class Boleto
     /**
      * @return int
      */
-    public function getQuantidadeDiasProtesto(): int
+    public function getQuantidadeDiasProtesto()
     {
         return $this->quantidadeDiasProtesto;
     }
@@ -393,7 +413,7 @@ class Boleto
     /**
      * @param int $quantidadeDiasProtesto
      */
-    public function setQuantidadeDiasProtesto(int $quantidadeDiasProtesto): void
+    public function setQuantidadeDiasProtesto($quantidadeDiasProtesto)
     {
         $this->quantidadeDiasProtesto = $quantidadeDiasProtesto;
     }
@@ -409,7 +429,7 @@ class Boleto
     /**
      * @param mixed $indicadorNumeroDiasLimiteRecebimento
      */
-    public function setIndicadorNumeroDiasLimiteRecebimento($indicadorNumeroDiasLimiteRecebimento): void
+    public function setIndicadorNumeroDiasLimiteRecebimento($indicadorNumeroDiasLimiteRecebimento)
     {
         $this->indicadorNumeroDiasLimiteRecebimento = $indicadorNumeroDiasLimiteRecebimento;
     }
@@ -425,7 +445,7 @@ class Boleto
     /**
      * @param mixed $codigoAceite
      */
-    public function setCodigoAceite($codigoAceite): void
+    public function setCodigoAceite($codigoAceite)
     {
         $this->codigoAceite = $codigoAceite;
     }
@@ -433,7 +453,7 @@ class Boleto
     /**
      * @return int
      */
-    public function getCodigoTipoTitulo(): int
+    public function getCodigoTipoTitulo()
     {
         return $this->codigoTipoTitulo;
     }
@@ -441,7 +461,7 @@ class Boleto
     /**
      * @param int $codigoTipoTitulo
      */
-    public function setCodigoTipoTitulo(int $codigoTipoTitulo): void
+    public function setCodigoTipoTitulo($codigoTipoTitulo)
     {
         $this->codigoTipoTitulo = $codigoTipoTitulo;
     }
@@ -457,7 +477,7 @@ class Boleto
     /**
      * @param mixed $descricaoTipoTitulo
      */
-    public function setDescricaoTipoTitulo($descricaoTipoTitulo): void
+    public function setDescricaoTipoTitulo($descricaoTipoTitulo)
     {
         $this->descricaoTipoTitulo = $descricaoTipoTitulo;
     }
@@ -473,7 +493,7 @@ class Boleto
     /**
      * @param mixed $indicadorPermissaoRecebimentoParcial
      */
-    public function setIndicadorPermissaoRecebimentoParcial($indicadorPermissaoRecebimentoParcial): void
+    public function setIndicadorPermissaoRecebimentoParcial($indicadorPermissaoRecebimentoParcial)
     {
         $this->indicadorPermissaoRecebimentoParcial = $indicadorPermissaoRecebimentoParcial;
     }
@@ -489,7 +509,7 @@ class Boleto
     /**
      * @param mixed $numeroTituloBeneficiario
      */
-    public function setNumeroTituloBeneficiario($numeroTituloBeneficiario): void
+    public function setNumeroTituloBeneficiario($numeroTituloBeneficiario)
     {
         $this->numeroTituloBeneficiario = $numeroTituloBeneficiario;
     }
@@ -505,7 +525,7 @@ class Boleto
     /**
      * @param mixed $textoCampoUtilizacaoBeneficiario
      */
-    public function setTextoCampoUtilizacaoBeneficiario($textoCampoUtilizacaoBeneficiario): void
+    public function setTextoCampoUtilizacaoBeneficiario($textoCampoUtilizacaoBeneficiario)
     {
         $this->textoCampoUtilizacaoBeneficiario = $textoCampoUtilizacaoBeneficiario;
     }
@@ -515,13 +535,15 @@ class Boleto
      */
     public function getNumeroTituloCliente()
     {
-        return $this->numeroTituloCliente;
+        $convenio = str_pad($this->getNumeroConvenio(), 10, "0", STR_PAD_LEFT);
+        $numeroTituloCliente = str_pad($this->numeroTituloCliente, 10, "0", STR_PAD_LEFT);
+        return $convenio.$numeroTituloCliente;
     }
 
     /**
      * @param mixed $numeroTituloCliente
      */
-    public function setNumeroTituloCliente($numeroTituloCliente): void
+    public function setNumeroTituloCliente($numeroTituloCliente)
     {
         $this->numeroTituloCliente = $numeroTituloCliente;
     }
@@ -537,7 +559,7 @@ class Boleto
     /**
      * @param mixed $textoMensagemBloquetoOcorrencia
      */
-    public function setTextoMensagemBloquetoOcorrencia($textoMensagemBloquetoOcorrencia): void
+    public function setTextoMensagemBloquetoOcorrencia($textoMensagemBloquetoOcorrencia)
     {
         $this->textoMensagemBloquetoOcorrencia = $textoMensagemBloquetoOcorrencia;
     }
@@ -553,7 +575,7 @@ class Boleto
     /**
      * @param mixed $email
      */
-    public function setEmail($email): void
+    public function setEmail($email)
     {
         $this->email = $email;
     }
@@ -569,7 +591,7 @@ class Boleto
     /**
      * @param mixed $quantidadeDiasNegativacao
      */
-    public function setQuantidadeDiasNegativacao($quantidadeDiasNegativacao): void
+    public function setQuantidadeDiasNegativacao($quantidadeDiasNegativacao)
     {
         $this->quantidadeDiasNegativacao = $quantidadeDiasNegativacao;
     }
@@ -592,14 +614,42 @@ class Boleto
         return $this;
     }
 
-    public function toArray() {
-        return [
-            'numeroConvenio' => $this->getNumeroConvenio(),
-            'numeroCarteira' => $this->getNumeroCarteira(),
-            'numeroVariacaoCarteira' => $this->getNumeroVariacaoCarteira(),
-            'codigoModalidade' => $this->getCodigoModalidade(),
-
-        ];
+    /**
+     * @return mixed
+     */
+    public function getAvalista()
+    {
+        return $this->avalista;
     }
 
+    /**
+     * @param mixed $avalista
+     * @return object Avalista
+     */
+    public function setAvalista($avalista)
+    {
+        $this->avalista = new Avalista($avalista);
+        return $this;
+    }
+
+    public function jsonSerialize () {
+        $arr = [];
+        foreach(get_class_methods($this) as $method){
+            if (strpos($method, 'get') !== false) {
+                $value = $this->{$method}();
+
+                if(is_numeric($value)){
+                    if($value > 0){
+                        $arr[lcfirst(str_replace(['set', 'get'], ['', ''], $method))] = $value;
+                    }
+                }else{
+                    if(!empty($value) || strlen(trim($value)) > 0){
+                        $arr[lcfirst(str_replace(['set', 'get'], ['', ''], $method))] = $value;
+                    }
+                }
+            }
+        }
+
+        return $arr;
+    }
 }
