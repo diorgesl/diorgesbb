@@ -122,12 +122,12 @@ MIT. Please see the [license file](license.md) for more information.
 [ico-version]: https://img.shields.io/packagist/v/diorgesl/diorgesbb.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/diorgesl/diorgesbb.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/diorgesl/diorgesbb/master.svg?style=flat-square
-[ico-styleci]: https://styleci.io/repos/12345678/shield
+[ico-styleci]: https://github.styleci.io/repos/299090003/shield
 
 [link-packagist]: https://packagist.org/packages/diorgesl/diorgesbb
 [link-downloads]: https://packagist.org/packages/diorgesl/diorgesbb
 [link-travis]: https://travis-ci.org/diorgesl/diorgesbb
-[link-styleci]: https://github.styleci.io/repos/299090003/shield?branch=master
+[link-styleci]: https://github.styleci.io/repos/299090003
 [link-author]: https://github.com/diorgesl
 [link-eduardo]: https://github.com/eduardokum/laravel-boleto
 [link-contributors]: ../../contributors
