@@ -62,7 +62,7 @@ $ret = $boletos->registrar($boleto);
 var_dump($ret);
 ```
 
-Resposta do servidor:
+Resposta do banco:
 ```
 {
    "numero":"00031285570043832319",
@@ -90,6 +90,169 @@ Resposta do servidor:
    ]
 }
 ```
+
+Outras funções:
+
+Dar baixa em um boleto:
+```
+?php 
+use Diorgesl\DiorgesBB\Boletos;
+
+$boletos = new Boletos();
+
+$boletos->baixar(12345);
+```
+
+Resposta do banco:
+```
+{
+  "numeroContratoCobranca": "19581316"
+  "dataBaixa": "01.10.2020"
+  "horarioBaixa": "15:04:33"
+}
+```
+---------
+Listar boletos:
+```
+?php 
+use Diorgesl\DiorgesBB\Boletos;
+
+$boletos = new Boletos();
+
+// Retornar todos os boletos baixados/liquidados no periodo do movimento
+$boletos = $boletos->boletos([
+    "indicadorSituacao" => "B", // A = em aberto (Padrão), B = Baixados/Protestados/Liquidados
+    "dataInicioMovimento" => "01.10.2020",
+    "dataFimMovimento" => "20.10.2020", 
+]);
+
+// Retornar todos os boletos de um CPF/CNPJ
+// Todos os boletos em aberto do CPF
+$boletos = $boletos->boletos([
+    //"indicadorSituacao" => "A", // A = em aberto (Padrão), B = Baixados/Protestados/Liquidados
+    "cpfPagador" => 979659401,
+    "digitoCPFPagador" => 32,
+]);
+
+//Todos os boletos em aberto do CNPJ 
+$boletos = $boletos->boletos([
+    "cnpjPagador" => 196152360001,
+    "digitoCNPJPagador" => 27,
+]);
+```
+---------
+Detalhar um Boleto:
+```
+?php 
+use Diorgesl\DiorgesBB\Boletos;
+
+$boletos = new Boletos();
+// Busca o boleto com ID 123456
+$boleto = $boletos->boleto(123456);
+var_dump($boleto);
+```
+
+Resposta do banco:
+```
+{
+   "numeroContratoCobranca":"19581316",
+   "codigoEstadoTituloCobranca":1,
+   "codigoTipoTituloCobranca":10,
+   "codigoModalidadeTitulo":1,
+   "codigoAceiteTituloCobranca":"N",
+   "codigoPrefixoDependenciaCobrador":14,
+   "codigoIndicadorEconomico":9,
+   "numeroTituloCedenteCobranca":"123456",
+   "dataEmissaoTituloCobranca":"29.09.2020",
+   "dataRegistroTituloCobranca":"30.09.2020",
+   "dataVencimentoTituloCobranca":"30.10.2020",
+   "valorOriginalTituloCobranca":109.9,
+   "valorAtualTituloCobranca":109.9,
+   "valorPagamentoParcialTitulo":0,
+   "valorAbatimentoTituloCobranca":0,
+   "percentualImpostoSobreOprFinanceirasTituloCobranca":0,
+   "valorImpostoSobreOprFinanceirasTituloCobranca":0,
+   "valorMoedaTituloCobranca":0,
+   "quantidadeParcelaTituloCobranca":0,
+   "dataBaixaAutomaticoTitulo":"30.10.2021",
+   "textoCampoUtilizacaoCedente":"",
+   "indicadorCobrancaPartilhadoTitulo":"N",
+   "valorMoedaAbatimentoTitulo":0,
+   "dataProtestoTituloCobranca":"",
+   "numeroCarteiraCobranca":17,
+   "numeroVariacaoCarteiraCobranca":35,
+   "quantidadeDiaProtesto":0,
+   "quantidadeDiaPrazoLimiteRecebimento":360,
+   "dataLimiteRecebimentoTitulo":"25.10.2021",
+   "indicadorPermissaoRecebimentoParcial":"N",
+   "textoCodigoBarrasTituloCobranca":"00197842400000109900000003128557000000123456",
+   "codigoOcorrenciaCartorio":0,
+   "indicadorDebitoCreditoTitulo":0,
+   "valorImpostoSobreOprFinanceirasRecebidoTitulo":0,
+   "valorAbatimentoTotal":0,
+   "valorCreditoCedente":0,
+   "codigoTipoLiquidacao":0,
+   "dataCreditoLiquidacao":"",
+   "dataRecebimentoTitulo":"",
+   "codigoPrefixoDependenciaRecebedor":0,
+   "codigoNaturezaRecebimento":0,
+   "codigoResponsavelAtualizacao":"",
+   "codigoTipoBaixaTitulo":0,
+   "valorReajuste":0,
+   "valorOutroRecebido":0,
+   "codigoIndicadorEconomicoUtilizadoInadimplencia":0,
+   "sacado":{
+      "codigoTipoInscricaoSacado":1,
+      "numeroInscricaoSacadoCobranca":97965940132,
+      "nomeSacadoCobranca":"CLIENTE TESTE",
+      "textoEnderecoSacadoCobranca":"RUA TESTE",
+      "nomeBairroSacadoCobranca":"TESTE",
+      "nomeMunicipioSacadoCobranca":"BRASILIA",
+      "siglaUnidadeFederacaoSacadoCobranca":"DF",
+      "numeroCepSacadoCobranca":79000000,
+      "valorPagoSacado":0,
+      "numeroIdentidadeSacadoTituloCobranca":""
+   },
+   "sacador":{
+      "codigoTipoInscricaoSacador":1,
+      "numeroInscricaoSacadorAvalista":97965940132,
+      "nomeSacadorAvalistaTitulo":"CLIENTE TESTE"
+   },
+   "multa":{
+      "percentualMultaTitulo":0,
+      "valorMultaTituloCobranca":0,
+      "dataMultaTitulo":"",
+      "valorMultaRecebido":0
+   },
+   "desconto":{
+      "percentualDescontoTitulo":0,
+      "dataDescontoTitulo":"",
+      "valorDescontoTitulo":0,
+      "codigoDescontoTitulo":0,
+      "valorDescontoUtilizado":0,
+      "segundoDesconto":{
+         "percentualSegundoDescontoTitulo":0,
+         "dataSegundoDescontoTitulo":"",
+         "valorSegundoDescontoTitulo":0,
+         "codigoSegundoDescontoTitulo":0
+      },
+      "terceiroDesconto":{
+         "percentualTerceiroDescontoTitulo":0,
+         "dataTerceiroDescontoTitulo":"",
+         "valorTerceiroDescontoTitulo":0,
+         "codigoTerceiroDescontoTitulo":0
+      }
+   },
+   "juroMora":{
+      "codigoTipoJuroMora":0,
+      "percentualJuroMoraTitulo":0,
+      "valorJuroMoraTitulo":0,
+      "dataJuroMoraTitulo":"",
+      "valorJuroMoraRecebido":0
+   }
+}
+```
+
 
 ## Change log
 

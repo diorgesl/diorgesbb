@@ -34,6 +34,11 @@ class Boletos
     protected $secrets = [];
 
     /**
+     * @var string
+     */
+    private $convenio;
+
+    /**
      * Boletos constructor.
      * @param Client $client
      */
@@ -44,6 +49,7 @@ class Boletos
         $this->token = $token;
         $this->uri = ! config('diorgesbb.production') ? 'https://api.hm.bb.com.br/cobrancas/v1/boletos' : 'https://api.bb.com.br/cobrancas/v1/boletos';
         $this->secrets = ! config('diorgesbb.production') ? config('diorgesbb.api.homologa') : config('diorgesbb.api.producao');
+        $this->convenio = str_pad($this->secrets['numeroConvenio'], 10, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -53,10 +59,9 @@ class Boletos
      */
     public function boleto($id)
     {
-        $convenio = str_pad($this->secrets['numeroConvenio'], 10, '0', STR_PAD_LEFT);
         $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
         try {
-            $res = $this->client->request('GET', $this->uri.'/'.$convenio.$boleto, [
+            $res = $this->client->request('GET', $this->uri.'/'.$this->convenio.$boleto, [
                 'query' => [
                     'gw-dev-app-key' => $this->secrets['developer_application_key'],
                     'numeroConvenio' => $this->secrets['numeroConvenio'],
@@ -89,10 +94,11 @@ class Boletos
         $query = array_merge($query, $params);
 
         try {
-            $request = $this->client->get($this->uri.'/', [
+            $request = $this->client->request( 'GET', $this->uri, [
                 'query' => $query,
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->token,
+                    'Content-type' => 'application/json'
                 ],
             ]);
 
@@ -115,6 +121,26 @@ class Boletos
                     'gw-dev-app-key' => $this->secrets['developer_application_key'],
                 ],
                 'body' => json_encode($boleto),
+                'headers' => [
+                    'Authorization' => 'Bearer '.$this->token,
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+
+            return json_decode($res->getBody()->getContents());
+        } catch (GuzzleException $e) {
+            $this->__responseException($e);
+        }
+    }
+
+    public function baixar($id){
+        $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
+        try {
+            $res = $this->client->request('POST', $this->uri.'/'.$this->convenio.$boleto.'/baixar', [
+                'query' => [
+                    'gw-dev-app-key' => $this->secrets['developer_application_key'],
+                ],
+                'body' => json_encode(["numeroConvenio" => $this->secrets['numeroConvenio']]),
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->token,
                     'Content-Type' => 'application/json',
