@@ -112,7 +112,8 @@ If you discover any security related issues, please email diorges@gis.net.br ins
 ## Credits
 
 - [Diorges Rocha][link-author]
-- Eduardo Kum (Laravel Boleto)
+- [Eduardo Kum (Laravel Boleto)][link-eduardo]
+- [All Contributors][link-contributors]
 
 ## License
 
@@ -126,6 +127,7 @@ MIT. Please see the [license file](license.md) for more information.
 [link-packagist]: https://packagist.org/packages/diorgesl/diorgesbb
 [link-downloads]: https://packagist.org/packages/diorgesl/diorgesbb
 [link-travis]: https://travis-ci.org/diorgesl/diorgesbb
-[link-styleci]: https://styleci.io/repos/12345678
+[link-styleci]: https://styleci.io/repos/299090003
 [link-author]: https://github.com/diorgesl
+[link-eduardo]: https://github.com/eduardokum/laravel-boleto
 [link-contributors]: ../../contributors
