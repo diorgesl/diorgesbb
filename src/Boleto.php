@@ -631,6 +631,9 @@ class Boleto implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function jsonSerialize()
     {
         $arr = [];
