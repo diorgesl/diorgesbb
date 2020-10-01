@@ -127,7 +127,7 @@ MIT. Please see the [license file](license.md) for more information.
 [link-packagist]: https://packagist.org/packages/diorgesl/diorgesbb
 [link-downloads]: https://packagist.org/packages/diorgesl/diorgesbb
 [link-travis]: https://travis-ci.org/diorgesl/diorgesbb
-[link-styleci]: https://styleci.io/repos/299090003
+[link-styleci]: https://github.styleci.io/repos/299090003/shield?branch=master
 [link-author]: https://github.com/diorgesl
 [link-eduardo]: https://github.com/eduardokum/laravel-boleto
 [link-contributors]: ../../contributors
