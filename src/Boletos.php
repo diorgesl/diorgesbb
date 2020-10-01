@@ -94,11 +94,11 @@ class Boletos
         $query = array_merge($query, $params);
 
         try {
-            $request = $this->client->request( 'GET', $this->uri, [
+            $request = $this->client->request('GET', $this->uri, [
                 'query' => $query,
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->token,
-                    'Content-type' => 'application/json'
+                    'Content-type' => 'application/json',
                 ],
             ]);
 
@@ -133,14 +133,15 @@ class Boletos
         }
     }
 
-    public function baixar($id){
+    public function baixar($id)
+    {
         $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
         try {
             $res = $this->client->request('POST', $this->uri.'/'.$this->convenio.$boleto.'/baixar', [
                 'query' => [
                     'gw-dev-app-key' => $this->secrets['developer_application_key'],
                 ],
-                'body' => json_encode(["numeroConvenio" => $this->secrets['numeroConvenio']]),
+                'body' => json_encode(['numeroConvenio' => $this->secrets['numeroConvenio']]),
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->token,
                     'Content-Type' => 'application/json',
