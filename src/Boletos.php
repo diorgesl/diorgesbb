@@ -131,19 +131,20 @@ class Boletos
     {
     }
 
-    public function linhaDigitavel($codigoBarras) {
+    public function linhaDigitavel($codigoBarras)
+    {
         $codigo = $codigoBarras;
 
-        $s1 = substr($codigo, 0, 4) . substr($codigo, 19, 5);
-        $s1 = $s1 . $this->__modulo10($s1);
+        $s1 = substr($codigo, 0, 4).substr($codigo, 19, 5);
+        $s1 = $s1.$this->__modulo10($s1);
         $s1 = substr_replace($s1, '.', 5, 0);
 
         $s2 = substr($codigo, 24, 10);
-        $s2 = $s2 . $this->__modulo10($s2);
+        $s2 = $s2.$this->__modulo10($s2);
         $s2 = substr_replace($s2, '.', 5, 0);
 
         $s3 = substr($codigo, 34, 10);
-        $s3 = $s3 . $this->__modulo10($s3);
+        $s3 = $s3.$this->__modulo10($s3);
         $s3 = substr_replace($s3, '.', 5, 0);
 
         $s4 = substr($codigo, 4, 1);
@@ -161,13 +162,12 @@ class Boletos
      * @param int $resto10
      *
      * @return int
-     *
      */
     public function __modulo11($n, $factor = 2, $base = 9, $x10 = 0, $resto10 = 0)
     {
         $sum = 0;
         for ($i = mb_strlen($n); $i > 0; $i--) {
-            $sum += ((int) mb_substr($n, $i - 1, 1))*$factor;
+            $sum += ((int) mb_substr($n, $i - 1, 1)) * $factor;
             if ($factor == $base) {
                 $factor = 1;
             }
@@ -176,13 +176,15 @@ class Boletos
 
         if ($x10 == 0) {
             $sum *= 10;
-            $digito = $sum%11;
+            $digito = $sum % 11;
             if ($digito == 10) {
                 $digito = $resto10;
             }
+
             return $digito;
         }
-        return $sum%11;
+
+        return $sum % 11;
     }
 
     /**
@@ -197,11 +199,12 @@ class Boletos
         $even = array_intersect_key($chars, array_fill_keys(range(0, count($chars), 2), null));
         $even = array_map(
             function ($n) {
-                return ($n >= 5) ? 2*$n - 9 : 2*$n;
+                return ($n >= 5) ? 2 * $n - 9 : 2 * $n;
             }, $even
         );
         $total = array_sum($odd) + array_sum($even);
-        return ((floor($total/10) + 1)*10 - $total)%10;
+
+        return ((floor($total / 10) + 1) * 10 - $total) % 10;
     }
 
     /**
