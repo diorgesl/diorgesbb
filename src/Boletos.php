@@ -73,7 +73,7 @@ class Boletos
 
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
-            $this->__responseException($e);
+            return json_decode($e->getResponse()->getBody()->getContents());
         }
     }
 
@@ -101,10 +101,13 @@ class Boletos
                     'Content-type' => 'application/json'
                 ],
             ]);
-
             return json_decode($request->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            $this->__responseException($e);
+       } catch (GuzzleException $e) {
+            if($e->getCode() == 404) {
+                return ['errors' => true, 'msg' => 'Nenhum boleto encontrado.'];
+            }else{
+                return json_decode($e->getResponse()->getBody()->getContents());
+            }
         }
     }
 
@@ -129,7 +132,7 @@ class Boletos
 
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
-            $this->__responseException($e);
+            return json_decode($e->getResponse()->getBody()->getContents());
         }
     }
 
@@ -149,7 +152,276 @@ class Boletos
 
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
-            $this->__responseException($e);
+            return json_decode($e->getResponse()->getBody()->getContents());
+        }
+    }
+
+    public function alterarBoleto($id, $params = []){
+        $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
+
+        // Dados Padrão
+        $body = [
+            'numeroConvenio' => $this->secrets['numeroConvenio'],
+            'indicadorNovaDataVencimento' => 'N',
+            'indicadorAtribuirDesconto' => 'N',
+            'indicadorAlterarDesconto' => 'N',
+            'indicadorAlterarDataDesconto' => 'N',
+            'indicadorProtestar' => 'N',
+            'indicadorSustacaoProtesto' => 'N',
+            'indicadorCancelarProtesto' => 'N',
+            'indicadorIncluirAbatimento' => 'N',
+            'indicadorAlterarAbatimento' => 'N',
+            'indicadorCobrarJuros' => 'N',
+            'indicadorDispensarJuros' => 'N',
+            'indicadorCobrarMulta' => 'N',
+            'indicadorDispensarMulta' => 'N',
+            'indicadorNegativar' => 'N',
+            'indicadorAlterarSeuNumero' => 'N',
+            'indicadorAlterarEnderecoPagador' => 'N',
+            'indicadorAlterarPrazoBoletoVencido' => 'N',
+        ];
+
+        // Faz as alteracoes baseado nos parametros passados
+        foreach($params as $key => $param) {
+            switch ($key) {
+                case 'dataVencimento':
+                    $body = array_merge($body, [
+                        'indicadorNovaDataVencimento' => 'S',
+                        'alteracaoData' => [
+                            'novaDataVencimento' => $params[$key],
+                        ],
+                    ]);
+                    break;
+                case 'dispensarMulta':
+                    $body = array_merge($body, [
+                        'indicadorDispensarMulta' => 'S',
+                    ]);
+                    break;
+                case 'diasPagamento':
+                    $body = array_merge($body, [
+                        'indicadorAlterarPrazoBoletoVencido' => 'S',
+                        'alteracaoPrazo' => [
+                            'quantidadeDiasAceite' => (int) $params[$key],
+                        ],
+                    ]);
+                    break;
+                case 'endereco':
+                    $arr = [];
+                    foreach($param as $k => $v){
+                        switch($k) {
+                            case 'endereco':
+                                $arr['enderecoPagador'] = $v;
+                                break;
+                            case 'bairro':
+                                $arr['bairroPagador'] = $v;
+                                break;
+                            case 'cidade':
+                                $arr['cidadePagador'] = $v;
+                                break;
+                            case 'uf':
+                                $arr['UFPagador'] = $v;
+                                break;
+                            case 'cep':
+                                $arr['CEPPagador'] = (int) $v;
+                                break;
+                        }
+                    }
+                    $body = array_merge($body, [
+                        'indicadorAlterarEnderecoPagador' => 'S',
+                        'alteracaoEndereco' => $arr,
+                    ]);
+                    break;
+
+                case 'desconto':
+                    $arr = [];
+                    foreach($param as $k => $v){
+                        switch($k) {
+                            case 'tipo':
+                                $arr['tipoPrimeiroDesconto'] = (int) $v;
+                                break;
+                            case 'valor':
+                                $arr['valorPrimeiroDesconto'] = (double) $v;
+                                break;
+                            case 'percentual':
+                                $arr['percentualPrimeiroDesconto'] = (double) $v;
+                                break;
+                            case 'data':
+                                $arr['dataPrimeiroDesconto'] = $v;
+                                break;
+                        }
+                    }
+                    $body = array_merge($body, [
+                        'indicadorAtribuirDesconto' => 'S',
+                        'desconto' => $arr,
+                    ]);
+                    break;
+                case 'alterarDesconto':
+                    $arr = [];
+                    foreach($param as $k => $v){
+                        switch($k) {
+                            case 'tipo':
+                                $arr['tipoPrimeiroDesconto'] = (int) $v;
+                                break;
+                            case 'valor':
+                                $arr['novoValorPrimeiroDesconto'] = (double) $v;
+                                break;
+                            case 'percentual':
+                                $arr['novoPercentualPrimeiroDesconto'] = (double) $v;
+                                break;
+                            case 'data':
+                                $arr['novaDataPrimeiroDesconto'] = $v;
+                                break;
+                        }
+                    }
+                    $body = array_merge($body, [
+                        'indicadorAlterarDesconto' => 'S',
+                        'alteracaoDesconto' => $arr,
+                    ]);
+                    break;
+                case 'alterarDataDesconto':
+                    $body = array_merge($body, [
+                        'indicadorAlterarDataDesconto' => 'S',
+                        'alteracaoDataDesconto' => [
+                            'novaDataLimitePrimeiroDesconto' => $params[$key],
+                        ],
+                    ]);
+                    break;
+
+                case 'protestar':
+                    $body = array_merge($body, [
+                        'indicadorProtestar' => 'S',
+                        'protesto' => [
+                            'quantidadeDiasProtesto' => (int) $params[$key],
+                        ],
+                    ]);
+                    break;
+
+                case 'sustarProtesto':
+                    $body = array_merge($body, [
+                        'indicadorSustacaoProtesto' => 'S',
+                    ]);
+                    break;
+
+                case 'cancelarProtesto':
+                    $body = array_merge($body, [
+                        'indicadorCancelarProtesto' => 'S',
+                    ]);
+                    break;
+
+                case 'abatimento':
+                    $body = array_merge($body, [
+                        'indicadorIncluirAbatimento' => 'S',
+                        'abatimento' => [
+                            'valorAbatimento' => $params[$key],
+                        ],
+                    ]);
+                    break;
+                case 'alterarAbatimento':
+                    $body = array_merge($body, [
+                        'indicadorAlterarAbatimento' => 'S',
+                        'alteracaoAbatimento' => [
+                            'novoValorAbatimento' => (double) $params[$key],
+                        ],
+                    ]);
+                    break;
+
+                case 'juros':
+                    $arr = [];
+                    foreach($param as $k => $v){
+                        switch($k) {
+                            case 'tipo':
+                                $arr['tipoJuros'] = (int) $v;
+                                break;
+                            case 'valor':
+                                $arr['valorJuros'] = (double) $v;
+                                break;
+                            case 'taxa':
+                                $arr['taxaJuros'] = (double) $v;
+                                break;
+                        }
+                    }
+                    $body = array_merge($body, [
+                        'indicadorCobrarJuros' => 'S',
+                        'juros' => $arr,
+                    ]);
+                    break;
+
+                case 'dispensarJuros':
+                    $body = array_merge($body, [
+                        'indicadorDispensarJuros' => 'S',
+                    ]);
+                    break;
+
+                case 'multa':
+                    $arr = [];
+                    foreach($param as $k => $v){
+                        switch($k) {
+                            case 'tipo':
+                                $arr['tipoMulta'] = (int) $v;
+                                break;
+                            case 'valor':
+                                $arr['valorMulta'] = (double) $v;
+                                break;
+                            case 'taxa':
+                                $arr['taxaMulta'] = (double) $v;
+                                break;
+                            case 'data':
+                                $arr['dataInicioMulta'] = $v;
+                                break;
+                        }
+                    }
+                    $body = array_merge($body, [
+                        'indicadorCobrarMulta' => 'S',
+                        'multa' => $arr,
+                    ]);
+                    break;
+
+                case 'negativar':
+                    $arr = [];
+                    foreach($param as $k => $v){
+                        switch($k) {
+                            case 'dias':
+                                $arr['quantidadeDiasNegativacao'] = (int) $v;
+                                break;
+                            case 'tipo':
+                                $arr['tipoNegativacao'] = (int) $v;
+                                break;
+                        }
+                    }
+                    $body = array_merge($body, [
+                        'indicadorNegativar' => 'S',
+                        'negativacao' => $arr,
+                    ]);
+                    break;
+
+                case 'seuNumero':
+                    $body = array_merge($body, [
+                        'indicadorAlterarSeuNumero' => 'S',
+                        'alteracaoSeuNumero' => [
+                            'codigoSeuNumero' => (int) $params[$key],
+                        ],
+                    ]);
+                    break;
+            }
+        }
+
+        //dd(json_encode($body));
+
+        try {
+            $res = $this->client->patch($this->uri.'/'.$this->convenio.$boleto, [
+                'query' => [
+                    'gw-dev-app-key' => $this->secrets['developer_application_key'],
+                ],
+                'body' => json_encode($body),
+                'headers' => [
+                    'Authorization' => 'Bearer '.$this->token,
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+
+            return json_decode($res->getBody()->getContents());
+        } catch (GuzzleException $e) {
+            return json_decode($e->getResponse()->getBody()->getContents());
         }
     }
 
@@ -231,16 +503,5 @@ class Boletos
         $total = array_sum($odd) + array_sum($even);
 
         return ((floor($total / 10) + 1) * 10 - $total) % 10;
-    }
-
-    /**
-     * @param GuzzleException $e
-     * @throws \Exception
-     */
-    protected function __responseException(GuzzleException $e)
-    {
-        $response = $e->getResponse();
-        $responseBodyAsString = $response->getBody()->getContents();
-        throw new \Exception($responseBodyAsString);
     }
 }

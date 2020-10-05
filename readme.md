@@ -275,7 +275,7 @@ If you discover any security related issues, please email diorges@gis.net.br ins
 ## Credits
 
 - [Diorges Rocha][link-author]
-- [Eduardo Kum (Laravel Boleto)][link-eduardo]
+- [Eduardo Gusmão (Laravel Boleto)][link-eduardo]
 - [All Contributors][link-contributors]
 
 ## License
