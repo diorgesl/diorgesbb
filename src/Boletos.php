@@ -60,20 +60,20 @@ class Boletos
     public function boleto($id)
     {
         $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
+        $payload = [
+            'query' => [
+                'gw-dev-app-key' => $this->secrets['developer_application_key'],
+                'numeroConvenio' => $this->secrets['numeroConvenio'],
+            ],
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->token,
+            ],
+        ];
         try {
-            $res = $this->client->request('GET', $this->uri.'/'.$this->convenio.$boleto, [
-                'query' => [
-                    'gw-dev-app-key' => $this->secrets['developer_application_key'],
-                    'numeroConvenio' => $this->secrets['numeroConvenio'],
-                ],
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->token,
-                ],
-            ]);
-
+            $res = $this->client->request('GET', $this->uri.'/'.$this->convenio.$boleto, $payload);
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
-            return json_decode($e->getResponse()->getBody()->getContents());
+            return ['payload' => $payload, 'parametro'=> $id, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
         }
     }
 
@@ -93,21 +93,22 @@ class Boletos
 
         $query = array_merge($query, $params);
 
-        try {
-            $request = $this->client->request('GET', $this->uri, [
-                'query' => $query,
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->token,
-                    'Content-type' => 'application/json',
-                ],
-            ]);
+        $payload = [
+            'query' => $query,
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->token,
+                'Content-type' => 'application/json',
+            ],
+        ];
 
+        try {
+            $request = $this->client->request('GET', $this->uri, $payload);
             return json_decode($request->getBody()->getContents());
         } catch (GuzzleException $e) {
             if ($e->getCode() == 404) {
                 return ['errors' => true, 'msg' => 'Nenhum boleto encontrado.'];
             } else {
-                return json_decode($e->getResponse()->getBody()->getContents());
+                return ['payload' => $payload, 'parametro'=> $params, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
             }
         }
     }
@@ -119,42 +120,42 @@ class Boletos
      */
     public function registrar(Boleto $boleto)
     {
+        $payload = [
+            'query' => [
+                'gw-dev-app-key' => $this->secrets['developer_application_key'],
+            ],
+            'body' => json_encode($boleto),
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->token,
+                'Content-Type' => 'application/json',
+            ],
+        ];
         try {
-            $res = $this->client->request('POST', $this->uri, [
-                'query' => [
-                    'gw-dev-app-key' => $this->secrets['developer_application_key'],
-                ],
-                'body' => json_encode($boleto),
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->token,
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
-
+            $res = $this->client->request('POST', $this->uri, $payload);
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
-            return json_decode($e->getResponse()->getBody()->getContents());
+            return ['payload' => $payload, 'parametro'=> $boleto, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
         }
     }
 
     public function baixar($id)
     {
         $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
+        $payload = [
+            'query' => [
+                'gw-dev-app-key' => $this->secrets['developer_application_key'],
+            ],
+            'body' => json_encode(['numeroConvenio' => $this->secrets['numeroConvenio']]),
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->token,
+                'Content-Type' => 'application/json',
+            ],
+        ];
         try {
-            $res = $this->client->request('POST', $this->uri.'/'.$this->convenio.$boleto.'/baixar', [
-                'query' => [
-                    'gw-dev-app-key' => $this->secrets['developer_application_key'],
-                ],
-                'body' => json_encode(['numeroConvenio' => $this->secrets['numeroConvenio']]),
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->token,
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
-
+            $res = $this->client->request('POST', $this->uri.'/'.$this->convenio.$boleto.'/baixar', $payload);
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
-            return json_decode($e->getResponse()->getBody()->getContents());
+            return ['payload' => $payload, 'parametro'=> $id, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
         }
     }
 
@@ -410,21 +411,22 @@ class Boletos
 
         //dd(json_encode($body));
 
-        try {
-            $res = $this->client->patch($this->uri.'/'.$this->convenio.$boleto, [
-                'query' => [
-                    'gw-dev-app-key' => $this->secrets['developer_application_key'],
-                ],
-                'body' => json_encode($body),
-                'headers' => [
-                    'Authorization' => 'Bearer '.$this->token,
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
+        $payload = [
+            'query' => [
+                'gw-dev-app-key' => $this->secrets['developer_application_key'],
+            ],
+            'body' => json_encode($body),
+            'headers' => [
+                'Authorization' => 'Bearer '.$this->token,
+                'Content-Type' => 'application/json',
+            ],
+        ];
 
+        try {
+            $res = $this->client->patch($this->uri.'/'.$this->convenio.$boleto, $payload);
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
-            return json_decode($e->getResponse()->getBody()->getContents());
+            return ['payload' => $payload, 'parametro'=> $id, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
         }
     }
 
