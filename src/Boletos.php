@@ -94,18 +94,19 @@ class Boletos
         $query = array_merge($query, $params);
 
         try {
-            $request = $this->client->request( 'GET', $this->uri, [
+            $request = $this->client->request('GET', $this->uri, [
                 'query' => $query,
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->token,
-                    'Content-type' => 'application/json'
+                    'Content-type' => 'application/json',
                 ],
             ]);
+
             return json_decode($request->getBody()->getContents());
-       } catch (GuzzleException $e) {
-            if($e->getCode() == 404) {
+        } catch (GuzzleException $e) {
+            if ($e->getCode() == 404) {
                 return ['errors' => true, 'msg' => 'Nenhum boleto encontrado.'];
-            }else{
+            } else {
                 return json_decode($e->getResponse()->getBody()->getContents());
             }
         }
@@ -136,14 +137,15 @@ class Boletos
         }
     }
 
-    public function baixar($id){
+    public function baixar($id)
+    {
         $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
         try {
             $res = $this->client->request('POST', $this->uri.'/'.$this->convenio.$boleto.'/baixar', [
                 'query' => [
                     'gw-dev-app-key' => $this->secrets['developer_application_key'],
                 ],
-                'body' => json_encode(["numeroConvenio" => $this->secrets['numeroConvenio']]),
+                'body' => json_encode(['numeroConvenio' => $this->secrets['numeroConvenio']]),
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->token,
                     'Content-Type' => 'application/json',
@@ -156,7 +158,8 @@ class Boletos
         }
     }
 
-    public function alterarBoleto($id, $params = []){
+    public function alterarBoleto($id, $params = [])
+    {
         $boleto = str_pad($id, 10, '0', STR_PAD_LEFT);
 
         // Dados Padrão
@@ -182,7 +185,7 @@ class Boletos
         ];
 
         // Faz as alteracoes baseado nos parametros passados
-        foreach($params as $key => $param) {
+        foreach ($params as $key => $param) {
             switch ($key) {
                 case 'dataVencimento':
                     $body = array_merge($body, [
@@ -207,8 +210,8 @@ class Boletos
                     break;
                 case 'endereco':
                     $arr = [];
-                    foreach($param as $k => $v){
-                        switch($k) {
+                    foreach ($param as $k => $v) {
+                        switch ($k) {
                             case 'endereco':
                                 $arr['enderecoPagador'] = $v;
                                 break;
@@ -234,16 +237,16 @@ class Boletos
 
                 case 'desconto':
                     $arr = [];
-                    foreach($param as $k => $v){
-                        switch($k) {
+                    foreach ($param as $k => $v) {
+                        switch ($k) {
                             case 'tipo':
                                 $arr['tipoPrimeiroDesconto'] = (int) $v;
                                 break;
                             case 'valor':
-                                $arr['valorPrimeiroDesconto'] = (double) $v;
+                                $arr['valorPrimeiroDesconto'] = (float) $v;
                                 break;
                             case 'percentual':
-                                $arr['percentualPrimeiroDesconto'] = (double) $v;
+                                $arr['percentualPrimeiroDesconto'] = (float) $v;
                                 break;
                             case 'data':
                                 $arr['dataPrimeiroDesconto'] = $v;
@@ -257,16 +260,16 @@ class Boletos
                     break;
                 case 'alterarDesconto':
                     $arr = [];
-                    foreach($param as $k => $v){
-                        switch($k) {
+                    foreach ($param as $k => $v) {
+                        switch ($k) {
                             case 'tipo':
                                 $arr['tipoPrimeiroDesconto'] = (int) $v;
                                 break;
                             case 'valor':
-                                $arr['novoValorPrimeiroDesconto'] = (double) $v;
+                                $arr['novoValorPrimeiroDesconto'] = (float) $v;
                                 break;
                             case 'percentual':
-                                $arr['novoPercentualPrimeiroDesconto'] = (double) $v;
+                                $arr['novoPercentualPrimeiroDesconto'] = (float) $v;
                                 break;
                             case 'data':
                                 $arr['novaDataPrimeiroDesconto'] = $v;
@@ -320,23 +323,23 @@ class Boletos
                     $body = array_merge($body, [
                         'indicadorAlterarAbatimento' => 'S',
                         'alteracaoAbatimento' => [
-                            'novoValorAbatimento' => (double) $params[$key],
+                            'novoValorAbatimento' => (float) $params[$key],
                         ],
                     ]);
                     break;
 
                 case 'juros':
                     $arr = [];
-                    foreach($param as $k => $v){
-                        switch($k) {
+                    foreach ($param as $k => $v) {
+                        switch ($k) {
                             case 'tipo':
                                 $arr['tipoJuros'] = (int) $v;
                                 break;
                             case 'valor':
-                                $arr['valorJuros'] = (double) $v;
+                                $arr['valorJuros'] = (float) $v;
                                 break;
                             case 'taxa':
-                                $arr['taxaJuros'] = (double) $v;
+                                $arr['taxaJuros'] = (float) $v;
                                 break;
                         }
                     }
@@ -354,16 +357,16 @@ class Boletos
 
                 case 'multa':
                     $arr = [];
-                    foreach($param as $k => $v){
-                        switch($k) {
+                    foreach ($param as $k => $v) {
+                        switch ($k) {
                             case 'tipo':
                                 $arr['tipoMulta'] = (int) $v;
                                 break;
                             case 'valor':
-                                $arr['valorMulta'] = (double) $v;
+                                $arr['valorMulta'] = (float) $v;
                                 break;
                             case 'taxa':
-                                $arr['taxaMulta'] = (double) $v;
+                                $arr['taxaMulta'] = (float) $v;
                                 break;
                             case 'data':
                                 $arr['dataInicioMulta'] = $v;
@@ -378,8 +381,8 @@ class Boletos
 
                 case 'negativar':
                     $arr = [];
-                    foreach($param as $k => $v){
-                        switch($k) {
+                    foreach ($param as $k => $v) {
+                        switch ($k) {
                             case 'dias':
                                 $arr['quantidadeDiasNegativacao'] = (int) $v;
                                 break;
