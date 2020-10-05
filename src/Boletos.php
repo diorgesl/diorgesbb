@@ -71,6 +71,7 @@ class Boletos
         ];
         try {
             $res = $this->client->request('GET', $this->uri.'/'.$this->convenio.$boleto, $payload);
+
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
             return ['payload' => $payload, 'parametro'=> $id, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
@@ -103,6 +104,7 @@ class Boletos
 
         try {
             $request = $this->client->request('GET', $this->uri, $payload);
+
             return json_decode($request->getBody()->getContents());
         } catch (GuzzleException $e) {
             if ($e->getCode() == 404) {
@@ -132,6 +134,7 @@ class Boletos
         ];
         try {
             $res = $this->client->request('POST', $this->uri, $payload);
+
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
             return ['payload' => $payload, 'parametro'=> $boleto, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
@@ -153,6 +156,7 @@ class Boletos
         ];
         try {
             $res = $this->client->request('POST', $this->uri.'/'.$this->convenio.$boleto.'/baixar', $payload);
+
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
             return ['payload' => $payload, 'parametro'=> $id, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
@@ -424,6 +428,7 @@ class Boletos
 
         try {
             $res = $this->client->patch($this->uri.'/'.$this->convenio.$boleto, $payload);
+
             return json_decode($res->getBody()->getContents());
         } catch (GuzzleException $e) {
             return ['payload' => $payload, 'parametro'=> $id, 'msg' => json_decode($e->getResponse()->getBody()->getContents())];
