@@ -7,6 +7,11 @@
 
 Pacote para Laravel, API para registro/verificação de boletos usando o projeto Piloto do BB, compátivel com Laravel 5 ao 8.
 
+A API piloto do Banco do Brasil serve para registrar/listar/alterar e baixar boletos diretamente
+no banco a partir de comunicação OAuth.
+
+Entre em contato com seu gerente bancário para conseguir utilizar a API.
+
 ## Installation
 
 Via Composer
@@ -25,7 +30,7 @@ php artisan vendor:publish --provider="Diorgesl\DiorgesBB\DiorgesBBServiceProvid
 Configurar o arquivo `config/diorgesbb.php` com os dados de acesso da API.
 
 Para registrar um boleto:
-```
+```php
 <?php 
 use Diorgesl\DiorgesBB\Boletos;
 use Diorgesl\DiorgesBB\Boleto;
@@ -63,7 +68,7 @@ var_dump($ret);
 ```
 
 Resposta do banco:
-```
+```json
 {
    "numero":"00031285570043832319",
    "numeroCarteira":17,
@@ -94,8 +99,8 @@ Resposta do banco:
 Outras funções:
 
 Dar baixa em um boleto:
-```
-?php 
+```php
+<?php 
 use Diorgesl\DiorgesBB\Boletos;
 
 $boletos = new Boletos();
@@ -104,7 +109,7 @@ $boletos->baixar(12345);
 ```
 
 Resposta do banco:
-```
+```json
 {
   "numeroContratoCobranca": "19581316"
   "dataBaixa": "01.10.2020"
@@ -113,8 +118,8 @@ Resposta do banco:
 ```
 ---------
 Listar boletos:
-```
-?php 
+```php
+<?php 
 use Diorgesl\DiorgesBB\Boletos;
 
 $boletos = new Boletos();
@@ -142,8 +147,8 @@ $boletos = $boletos->boletos([
 ```
 ---------
 Detalhar um Boleto:
-```
-?php 
+```php
+<?php 
 use Diorgesl\DiorgesBB\Boletos;
 
 $boletos = new Boletos();
@@ -153,7 +158,7 @@ var_dump($boleto);
 ```
 
 Resposta do banco:
-```
+```json
 {
    "numeroContratoCobranca":"19581316",
    "codigoEstadoTituloCobranca":1,
