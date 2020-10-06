@@ -111,8 +111,8 @@ $boletos->baixar(12345);
 Resposta do banco:
 ```json
 {
-  "numeroContratoCobranca": "19581316"
-  "dataBaixa": "01.10.2020"
+  "numeroContratoCobranca": "19581316",
+  "dataBaixa": "01.10.2020",
   "horarioBaixa": "15:04:33"
 }
 ```
