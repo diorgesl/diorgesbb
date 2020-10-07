@@ -5,56 +5,56 @@ namespace Diorgesl\DiorgesBB;
 class Pagador implements \JsonSerializable
 {
     /**
-     * Nome do Pagador
+     * Nome do Pagador.
      *
      * @var string
      */
     protected $nome;
 
     /**
-     * Endereço do Pagador
+     * Endereço do Pagador.
      *
      * @var string
      */
     protected $endereco;
 
     /**
-     * Bairro do Pagador
+     * Bairro do Pagador.
      *
      * @var string
      */
     protected $bairro;
 
     /**
-     * CEP do Pagador
+     * CEP do Pagador.
      *
      * @var string
      */
     protected $cep;
 
     /**
-     * UF do Pagador
+     * UF do Pagador.
      *
      * @var string
      */
     protected $uf;
 
     /**
-     * Cidade do Pagador
+     * Cidade do Pagador.
      *
      * @var string
      */
     protected $cidade;
 
     /**
-     * Documento do Pagador - CPF ou CNPJ
+     * Documento do Pagador - CPF ou CNPJ.
      *
      * @var string
      */
     protected $numeroRegistro;
 
     /**
-     * Identifica se é CPF ou CNPJ
+     * Identifica se é CPF ou CNPJ.
      *
      * @var int
      */
@@ -195,7 +195,8 @@ class Pagador implements \JsonSerializable
      */
     public function getNumeroRegistro()
     {
-        $registro = (int) ltrim(str_replace(['.','/','-'],'', $this->numeroRegistro), '0');
+        $registro = (int) ltrim(str_replace(['.', '/', '-'], '', $this->numeroRegistro), '0');
+
         return $registro;
     }
 
