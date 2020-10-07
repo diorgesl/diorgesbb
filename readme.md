@@ -38,8 +38,9 @@ use Diorgesl\DiorgesBB\Pagador;
 
 $boletos = new Boletos();
 
+// O pagador será definido como CPF ou CNPJ baseado no tamanho do numeroRegistro
 $pagador = new Pagador([
-    'numeroRegistro' => 97965940132,
+    'numeroRegistro' => '979.659.401-32',
     'nome' => 'CLIENTE TESTE',
     'endereco' => 'AL SATELITE 13',
     'bairro' => 'UNIVERSITARIO',
