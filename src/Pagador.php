@@ -171,6 +171,7 @@ class Pagador implements \JsonSerializable
     public function getCep()
     {
         $cep = (int) ltrim(str_replace(['.','-'],'', $this->cep), '0');
+
         return $cep;
     }
 

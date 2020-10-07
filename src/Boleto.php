@@ -171,14 +171,19 @@ class Boleto implements \JsonSerializable
     protected $textoCampoUtilizacaoBeneficiario;
 
     /*
+     * Informação do Banco: // Inicia
      * Número de identificação do boleto (correspondente ao NOSSO NÚMERO),
      * no formato STRING, com 20 dígitos, que deverá ser formatado da
      * seguinte forma:
      * “000” + (número do convênio com 7 dígitos) + (10 algarismos - se
      * necessário, completar com zeros à esquerda).
      * Campo Obrigatório.
+     * Fim //
      *
-     * @var string
+     * Esse campo é montado automaticamente, você precisará informar apenas
+     * o ID do seu Boleto (do seu Sistema), o resto deixa que fazemos pra você.
+     *
+     * @var string|int
      */
     protected $numeroTituloCliente;
 

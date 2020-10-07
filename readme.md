@@ -49,6 +49,7 @@ $pagador = new Pagador([
     'uf' => 'MS'
 ]);
 
+// Todos os campos aqui tem explicação na classe Boleto (as informações contidas lá foram retiradas do Swagger da API)
 $boleto = new Boleto([
     "codigoModalidade" => 1,
     "dataEmissao" => "29.09.2020",
