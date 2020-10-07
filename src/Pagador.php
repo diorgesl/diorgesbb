@@ -166,11 +166,12 @@ class Pagador implements \JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getCep()
     {
-        return $this->cep;
+        $cep = (int) ltrim(str_replace(['.','-'],'', $this->cep), '0');
+        return $cep;
     }
 
     /**

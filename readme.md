@@ -42,10 +42,10 @@ $boletos = new Boletos();
 $pagador = new Pagador([
     'numeroRegistro' => '979.659.401-32',
     'nome' => 'CLIENTE TESTE',
-    'endereco' => 'AL SATELITE 13',
-    'bairro' => 'UNIVERSITARIO',
-    'cidade' => 'CORUMBA',
-    'cep' => 79304310,
+    'endereco' => 'RUA TESTE',
+    'bairro' => 'BRASILIA',
+    'cidade' => 'BRASIL',
+    'cep' => '10304-210',
     'uf' => 'MS'
 ]);
 
