@@ -206,7 +206,7 @@ class Pagador implements \JsonSerializable
      */
     public function getTipoRegistro()
     {
-        return strlen($this->numeroRegistro) >= 14 ? 2 : 1;
+        return strlen($this->numeroRegistro) > 14 ? 2 : 1;
     }
 
     /**
